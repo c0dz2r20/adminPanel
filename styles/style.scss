@@ -1,0 +1,17 @@
+html,body {
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box !important;
+}
+
+@media (min-width: 1200px){ 
+    html,body {
+        background-color: #ffffff;
+        height: 100%;
+        width :100%;
+    }
+}
+
+@import '../styles/modules_styles/admin-pages-common';
+@import '../styles/modules_styles/index-page';
+@import '../styles/modules_styles/admin-page';
+@import '../styles/modules_styles/admin-documentation';

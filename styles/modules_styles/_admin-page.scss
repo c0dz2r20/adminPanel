@@ -1,0 +1,21 @@
+.admin-page-wrapper {
+    .admin-summary {
+        margin-top: 20px;
+
+        .attendance-count-wrapper {
+            table {
+                font-size: 14px;
+                color: #525252;
+            }
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    .admin-page-wrapper {
+        width: 1200px;
+        margin: 0 50%;
+        transform: translateX(-50%);
+        box-shadow: 2px 0 12px #525252;
+    }
+}

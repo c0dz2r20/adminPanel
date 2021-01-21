@@ -71,7 +71,9 @@ showAllData = () => {
 
                     // Creating Document Upload Details
                     let admin_doc_table_body_tr_doc_uploadTime = document.createElement('td')
-                    admin_doc_table_body_tr_doc_uploadTime.innerText = metadata.timeCreated
+                    let createTime = metadata.timeCreated
+                    let newTime = createTime.substr(0,10)
+                    admin_doc_table_body_tr_doc_uploadTime.innerText = newTime
                     download_tr.appendChild(admin_doc_table_body_tr_doc_uploadTime)
 
                     // Creating action link to delete

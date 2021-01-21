@@ -31,10 +31,10 @@ admin_document_upload_btn.onclick = (e) => {
     docRef = storageRef.child(file.name)
 
     // Uploaidng file to the database
-    docRef.put(file, metaData).then(function(snapshot) {
+    docRef.put(file).then(function(snapshot) {
     alert(' Document uploaded successfully !!! ')
     })
-
+    showAllData()
 }
 
 // Display All Uploaded files on the screen
@@ -44,13 +44,22 @@ showAllData = () => {
     let test = document.getElementById('test')
     storageRef.listAll().then(function(result) {
         result.items.forEach(function(data) {
+
+            let download_tr = document.createElement('tr')
+
+            let uploadedList = document.querySelectorAll('.uploaded_document_list')
+            for(let upList of uploadedList) {
+                upList.remove()
+            }
+
             data.getDownloadURL().then(function(url) {
 
                 // Function to show All Data
                 data.getMetadata().then(function (metadata) {
                     
+                    
                     // Creating document download link
-                    let download_tr = document.createElement('tr')
+                    download_tr.classList.add('uploaded_document_list')
                     let admin_doc_table_body_tr_download_link = document.createElement('td')
                     let a = document.createElement('a')
                     a.innerText = data.name

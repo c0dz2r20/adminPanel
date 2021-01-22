@@ -72,16 +72,17 @@
     a {
       text-decoration: none;
       color: #fff;
-      font-size: 11px;
+      font-size: 10px;
       display: flex;
       align-items: center;
       background-color: #6c63ff;
-      padding: 7px;
-      border-radius: 4px;
+      padding: 7px 10px;
+      border-radius: 3px;
       margin: 10px;
-      font-weight: 400;
+      font-weight: bold;
       letter-spacing: 1px;
       text-align: center;
+      text-transform: uppercase;
       outline: none;
       svg {
         margin-left: 8px;

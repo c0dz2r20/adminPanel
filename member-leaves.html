@@ -119,7 +119,18 @@
                     Leave Status / history
                 </span>
 
-                <table class="leave-records"></table>
+                <table class="table uploaded-document-table table-striped mt-2 small">
+                    <thead>
+                      <tr>
+                        <th scope="col">Request Details</th>
+                        <th scope="col">Period</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Revoke</th>
+                      </tr>
+                    </thead>
+                    <tbody class="member_leaves_table_body">
+                    </tbody>
+                </table>
             </div>
         </div>
         
@@ -129,6 +140,6 @@
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.2.3/firebase-storage.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-database.js"></script>
-        <script src="../adminPanelGH/scripts/member_leaves.js"></script>
+        <script src="./scripts/member_leaves.js"></script>
     </body>
 </html>

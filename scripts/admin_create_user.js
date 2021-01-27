@@ -97,9 +97,12 @@ showCreatedUser = () => {
          body_row.appendChild(td_mobileNumber)
 
          // Table Data for Created On
-         let td_createdOn = document.createElement('td')
-         td_createdOn.innerText = doc.data().serverTimestamp
-         body_row.appendChild(td_createdOn)
+         let td_logTime = document.createElement('td')
+         let outT = doc.data().timestamp.seconds
+         let n = new Date()
+         n.setTime(outT * 1000)
+         td_logTime.innerText = n
+         body_row.appendChild(td_logTime)
 
          // Table Data for Delete/Edit
          let td_delete_edit = document.createElement('td')

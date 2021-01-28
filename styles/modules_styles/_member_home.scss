@@ -20,3 +20,16 @@
 .member-leave-textarea {
   margin: 10px 0;
 }
+
+.mark-attendance {
+  margin-right: 20px;
+  padding: 5px 10px;
+  color: #eeeeee;
+  border-radius: 3px;
+  text-decoration: none !important;
+  vertical-align: middle;
+  text-transform: uppercase;
+  &:hover {
+    color: #eeeeee;
+  }
+}

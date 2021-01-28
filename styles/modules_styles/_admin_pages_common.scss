@@ -90,13 +90,16 @@
     }
   }
 }
-
+.container {
+  padding-bottom: 20px !important;
+}
 .pills {
   box-shadow: 2px 2px 20px #e1e1e1;
   padding: 10px 20px;
   border-radius: 8px;
   height: auto;
-  margin: 40px 0;
+  margin: 20px 0;
+
   .table-name {
     color: #6c63ff;
     display: inline-block;
@@ -173,8 +176,13 @@
 }
 
 .admin_action_delete,
+.admin_action_accept,
+.admin_action_reject,
 .admin_action_edit {
   cursor: pointer;
+  margin: 0 10px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .admin_action_edit {

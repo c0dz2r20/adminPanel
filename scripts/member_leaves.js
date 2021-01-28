@@ -43,35 +43,70 @@ leave_request_toDb = () => {
         leaveDetails: leave_details.value,
         leaveStartDate: leave_start_date.value,
         leaveEndDate: leave_end_date.value,
-        leaveStatus: 'Pending'
+        logTime: firebase.firestore.FieldValue.serverTimestamp(),
+        modComments: "NA",
+        leaveStatus: 'Pending',
+        requestUpdateLogTime: 'NA'
     })
 }
 
 leave_details_db = () => {
     let member_leaves_table_body = document.getElementsByClassName('member_leaves_table_body')[0]
-    db_leaves.get().then((querySnapshot) => {
+    db_leaves.orderBy('logTime', 'desc').onSnapshot((querySnapshot) => {
+
+         // Regenrating Table rows again
+        let memberLeave = document.querySelectorAll('.members-leave-class')
+        for(let mleave of memberLeave) {
+            mleave.remove();                
+        }
         querySnapshot.forEach((doc) => {
-            let tr = document.createElement('tr')
             
+            let tr = document.createElement('tr')
+            tr.classList.add('members-leave-class')
+            tr.setAttribute('data-id', doc.id)
+
             // Leave Request Details
             let td_leave_details = document.createElement('td')
             td_leave_details.innerText = doc.data().leaveDetails
             td_leave_details.style.wordWrap = 'break-word'
             td_leave_details.style.verticalAlign = "middle"
-            td_leave_details.style.width = '350px'
-            tr.appendChild(td_leave_details)
             
+            tr.appendChild(td_leave_details)
+
+            // Request Log Time
+            let td_logTime = document.createElement('td')
+            let outT = doc.data().logTime.seconds
+            let n = new Date()
+            n.setTime(outT * 1000)
+            td_logTime.innerText = n
+            tr.appendChild(td_logTime)
+                
            //  Leave Peroid Details
            let td_leave_period = document.createElement('td')
            td_leave_period.style.verticalAlign = "middle"
-           td_leave_period.innerText = `${doc.data().leaveStartDate} :: ${doc.data().leaveEndDate}`
+           td_leave_period.innerText = "From " + doc.data().leaveStartDate + "\n"  +  "Till " + doc.data().leaveEndDate
            tr.appendChild(td_leave_period)
             
             // Leave Status
             let td_leave_status = document.createElement("td")
+            td_leave_status.style.wordWrap = 'break-word'
             td_leave_status.style.verticalAlign = "middle"
-            td_leave_status.innerText = doc.data().leaveStatus
+            let updateT = doc.data().requestUpdateLogTime.seconds
+            let updateD = new Date()
+            updateD.setTime(updateT * 1000)
+            if(doc.data().requestUpdateLogTime === "NA") {
+                td_leave_status.innerText = doc.data().leaveStatus
+            }
+            else {
+                td_leave_status.innerText = doc.data().leaveStatus + " on " + "\n" + updateD
+            }
             tr.appendChild(td_leave_status)
+
+            // Mod Comments
+            let td_modComments = document.createElement("td")
+            td_modComments.style.verticalAlign = "middle"
+            td_modComments.innerText = doc.data().modComments
+            tr.appendChild(td_modComments)
             
             // Revoke Request
             let td_delete_icon = document.createElement('img')

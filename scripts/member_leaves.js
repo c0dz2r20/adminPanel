@@ -38,6 +38,8 @@ raise_request.onclick = () => {
 }
 
 db_leaves = db.collection('leave_requests')
+
+// Adding request to the database
 leave_request_toDb = () => {
     db_leaves.doc().set({
         leaveDetails: leave_details.value,
@@ -109,15 +111,35 @@ leave_details_db = () => {
             tr.appendChild(td_modComments)
             
             // Revoke Request
-            let td_delete_icon = document.createElement('img')
-            td_delete_icon.setAttribute('src', './assets/delete.svg')
-            td_delete_icon.classList.add('admin_action_delete')
-            td_delete_icon.style.verticalAlign = "middle"
-            tr.appendChild(td_delete_icon)
-            
+            if(doc.data().leaveStatus === 'Pending') {
+                let td_delete_icon = document.createElement('img')
+                td_delete_icon.setAttribute('src', './assets/delete.svg')
+                td_delete_icon.classList.add('admin_action_delete')
+                td_delete_icon.style.verticalAlign = "middle"
+                tr.appendChild(td_delete_icon)
+                
+            }
+
+            else {
+                let td_revoke = document.createElement('td')
+                td_revoke.innerText = 'Closed.'
+                tr.appendChild(td_revoke)
+            }
+            revokeLeave()
             member_leaves_table_body.appendChild(tr)
         })
     })
 }
 
+// To revoke a leave request
+revokeLeave = () => {
+    let revoke = document.getElementsByClassName("admin_action_delete")
+    for (let recallLeave of revoke) {
+        recallLeave.onclick = (e) => {
+            alert('Request will be permantely deleted')
+            let getLeaveRow = e.target.parentElement.getAttribute('data-id')
+            db_leaves.doc(getLeaveRow).delete()
+        }
+    }
+}
 leave_details_db()

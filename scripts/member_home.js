@@ -61,21 +61,52 @@ recordtoDb = () => {
         toNIC: create_tonic.value
     })
 }
-db_attendance = db.collection('attendance')
+db_attendance = db.collection('attendance').doc()
 let attendance = document.getElementsByClassName("mark-attendance")[0]
-attendance.onclick = () => {
-    db_attendance.doc().set({
-        punchInTime: firebase.firestore.FieldValue.serverTimestamp(),
-        attendanceButtonColor: '75cfb8'
-    })
-    db_attendance.orderBy('punchInTime', 'desc').limit(1).onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
+// attendance.onclick = () => {
+//     db_attendance
+//         .set({
+//             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+//             attendanceButtonColor: '75cfb8'
+//         })
+//         .then(() => {
+//             alert('Attendance is marked for the day for details check the Attendance section')
+//         })
+//     db.collection("attendance").orderBy('timestamp', 'desc').limit(1).get().then((querySnapshot) => {
+//         querySnapshot.forEach((doc) => {
             
-            let time = doc.data().punchInTime.seconds
-            let n = new Date()
-            n.setTime(time * 1000)
-            alert('Your attendance is marked at' + "\n" + n)
-        })
-    })
+//             attendance.style.backgroundColor = "#" + doc.data().attendanceButtonColor
+//             attendance.innerText = 'Punched In'
+  
+//         })
+//     })
     
+// }
+
+
+
+if (attendance.innerText === 'Punch In') {
+    alert('mark your attendance')
+}
+else {
+    attendance.onclick = () => {
+            db_attendance
+                .set({
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    attendanceButtonColor: '75cfb8'
+                })
+                .then(() => {
+                    alert('Attendance is marked for the day for details check the Attendance section')
+                    attendance.innerText = 'Punched In'
+                })
+            // db.collection("attendance").orderBy('timestamp', 'desc').limit(1).get().then((querySnapshot) => {
+            //     querySnapshot.forEach((doc) => {
+                    
+            //         attendance.style.backgroundColor = "#" + doc.data().attendanceButtonColor
+            //         attendance.innerText = 'Punched In'
+          
+            //     })
+            // })
+            
+        }
 }

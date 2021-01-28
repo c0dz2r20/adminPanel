@@ -133,13 +133,17 @@ body {
   margin-left: 8px;
 }
 
+.container {
+  padding-bottom: 20px !important;
+}
+
 .pills {
   -webkit-box-shadow: 2px 2px 20px #e1e1e1;
           box-shadow: 2px 2px 20px #e1e1e1;
   padding: 10px 20px;
   border-radius: 8px;
   height: auto;
-  margin: 40px 0;
+  margin: 20px 0;
 }
 
 .pills .table-name {
@@ -257,8 +261,13 @@ body {
 }
 
 .admin_action_delete,
+.admin_action_accept,
+.admin_action_reject,
 .admin_action_edit {
   cursor: pointer;
+  margin: 0 10px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .admin_action_edit {
@@ -420,5 +429,19 @@ body {
 
 .member-leave-textarea {
   margin: 10px 0;
+}
+
+.mark-attendance {
+  margin-right: 20px;
+  padding: 5px 10px;
+  color: #eeeeee;
+  border-radius: 3px;
+  text-decoration: none !important;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+.mark-attendance:hover {
+  color: #eeeeee;
 }
 /*# sourceMappingURL=style.css.map */

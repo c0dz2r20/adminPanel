@@ -48,10 +48,8 @@ create_issue_btn.onclick = () => {
         create_start_time.value = ""
         create_end_time.value = ""
         create_tonic.value = 'Referred to NIC'
-
     }
 }
-
 recordtoDb = () => {
     db_issue_logged = db.collection('issue_added').doc()
     db_issue_logged.set({
@@ -62,4 +60,22 @@ recordtoDb = () => {
         issueEndDate: create_end_time.value,
         toNIC: create_tonic.value
     })
+}
+db_attendance = db.collection('attendance')
+let attendance = document.getElementsByClassName("mark-attendance")[0]
+attendance.onclick = () => {
+    db_attendance.doc().set({
+        punchInTime: firebase.firestore.FieldValue.serverTimestamp(),
+        attendanceButtonColor: '75cfb8'
+    })
+    db_attendance.orderBy('punchInTime', 'desc').limit(1).onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            
+            let time = doc.data().punchInTime.seconds
+            let n = new Date()
+            n.setTime(time * 1000)
+            alert('Your attendance is marked at' + "\n" + n)
+        })
+    })
+    
 }

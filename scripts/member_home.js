@@ -33,14 +33,35 @@ create_issue_btn.onclick = () => {
     else if (create_start_time.value === "") {
         alert ('Provide Issue Start Date')
     }
-    else if (create_end_time.value === "") {
-        alert ('Provide Issue Close Time')
-    }
     else if (create_tonic.value === 'Referred to NIC') {
         alert (' Select whether issue is referred to NIC ')
     }
     else {
-        recordtoDb()
+        if(create_end_time.value === "") {
+            alert("You have not provided Close Time for the issue go to Records to update.")
+            db_issue_logged = db.collection('issue_added').doc()
+            db_issue_logged.set({
+                issueSource: create_issue_source.value,
+                userType: create_user_type.value,
+                issueType: create_issue_type.value,
+                issueStartDate: create_start_time.value,
+                issueEndDate: "NP",
+                toNIC: create_tonic.value,
+                serverTimeStamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+        }
+        else {
+            db_issue_logged = db.collection('issue_added').doc()
+            db_issue_logged.set({
+                issueSource: create_issue_source.value,
+                userType: create_user_type.value,
+                issueType: create_issue_type.value,
+                issueStartDate: create_start_time.value,
+                issueEndDate: create_end_time.value,
+                toNIC: create_tonic.value,
+                serverTimeStamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+        }
         alert ('Issue logged successfully  !!! ')
         create_issue_source.value = 'Issue Source'
         create_issue_type.value = 'Issue Type'
@@ -50,63 +71,75 @@ create_issue_btn.onclick = () => {
         create_tonic.value = 'Referred to NIC'
     }
 }
-recordtoDb = () => {
-    db_issue_logged = db.collection('issue_added').doc()
-    db_issue_logged.set({
-        issueSource: create_issue_source.value,
-        userType: create_user_type.value,
-        issueType: create_issue_type.value,
-        issueStartDate: create_start_time.value,
-        issueEndDate: create_end_time.value,
-        toNIC: create_tonic.value
-    })
-}
-db_attendance = db.collection('attendance').doc()
-let attendance = document.getElementsByClassName("mark-attendance")[0]
-// attendance.onclick = () => {
-//     db_attendance
-//         .set({
-//             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-//             attendanceButtonColor: '75cfb8'
-//         })
-//         .then(() => {
-//             alert('Attendance is marked for the day for details check the Attendance section')
-//         })
-//     db.collection("attendance").orderBy('timestamp', 'desc').limit(1).get().then((querySnapshot) => {
-//         querySnapshot.forEach((doc) => {
-            
-//             attendance.style.backgroundColor = "#" + doc.data().attendanceButtonColor
-//             attendance.innerText = 'Punched In'
-  
-//         })
-//     })
+
+
+totalCountForDay = () => {
+
+    let dayCount = document.getElementsByClassName('day-count')[0]
+    let refDb = db.collection('issue_added')
+    let li = document.createElement('li')
+    li.classList.add('day-count-li')
+
+    // Completed Count
+    let date  = new Date()
+    let fb = firebase.firestore.Timestamp.now().toDate()
+    console.log(fb);
+    // if(refDb.where('issueEndDate', '!=', fb)) {
+    //     console.log('match found');
+
+        //Completed Count
+        refDb.where('issueEndDate', '!=', 'NP').onSnapshot((querySnapshot) => {
     
-// }
+            // Regenrating Table rows again
+            let completedList = document.querySelectorAll(".completed")
+            for(let removeOldData of completedList) {
+                removeOldData.remove()
+            }
+            let size = querySnapshot.size
+            let completed = document.createElement("span")
+            completed.classList.add('completed')
+            completed.innerText = ' Total completed - ' + size
+            li.appendChild(completed)
+            dayCount.appendChild(li)
+        })
 
+        // Pending Count
+        refDb.where('issueEndDate', '==', 'NP').onSnapshot((querySnapshot) => {
 
+            let pendingList = document.querySelectorAll(".pending")
+            for(let removeOldData of pendingList) {
+                removeOldData.remove()
+            }
+            let size = querySnapshot.size
+            let pending = document.createElement("span")
+            pending.classList.add('pending')
+            pending.innerText = ' Total Pending - ' + size
+            li.appendChild(pending)
+            dayCount.appendChild(li)
+        })
 
-if (attendance.innerText === 'Punch In') {
-    alert('mark your attendance')
+        // Sent to NIC
+        refDb.where('toNIC', '==', 'Yes').onSnapshot((querySnapshot) => {
+            let nicList = document.querySelectorAll(".pendingfromNic")
+                for(let removeOldData of nicList) {
+                    removeOldData.remove()
+                }
+                let size = querySnapshot.size
+                let pendingfromNic = document.createElement("span")
+                pendingfromNic.classList.add('pendingfromNic')
+                pendingfromNic.innerText = ' Total pending with NIC - ' + size
+                li.appendChild(pendingfromNic)
+                dayCount.appendChild(li)
+        })
+        
+    // }
+    // else {
+    //     console.log(' No data of current day');
+    //     let noRecord = document.createElement("li")
+    //     li.innerText = "No records added for the day"
+    //     dayCount.appendChild(li)
+    // }
+
 }
-else {
-    attendance.onclick = () => {
-            db_attendance
-                .set({
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    attendanceButtonColor: '75cfb8'
-                })
-                .then(() => {
-                    alert('Attendance is marked for the day for details check the Attendance section')
-                    attendance.innerText = 'Punched In'
-                })
-            // db.collection("attendance").orderBy('timestamp', 'desc').limit(1).get().then((querySnapshot) => {
-            //     querySnapshot.forEach((doc) => {
-                    
-            //         attendance.style.backgroundColor = "#" + doc.data().attendanceButtonColor
-            //         attendance.innerText = 'Punched In'
-          
-            //     })
-            // })
-            
-        }
-}
+
+totalCountForDay()

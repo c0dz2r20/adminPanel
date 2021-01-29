@@ -20,7 +20,22 @@
 .member-leave-textarea {
   margin: 10px 0;
 }
-
+.top-navbar-right-links {
+  display: flex;
+  align-items: center;
+  .logout {
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: #eeeeee;
+    text-transform: uppercase;
+    font-size: 10px;
+    margin-left: 10px;
+    background: orangered;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+}
 .mark-attendance {
   margin-right: 20px;
   padding: 5px 10px;
@@ -32,4 +47,15 @@
   &:hover {
     color: #eeeeee;
   }
+}
+.first-login {
+  border-radius: 4px;
+  color: #eeeeee;
+  font-size: 11px;
+}
+
+.day-count-li {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
 }

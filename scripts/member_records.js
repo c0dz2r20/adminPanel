@@ -103,12 +103,14 @@ fetchPendingData = () => {
             tr.appendChild(td_issueStartDate)
 
             // Issue End Date
+            let td_issueEndDateData = document.createElement('td')
             let td_issueEndDate = document.createElement('input')
             td_issueEndDate.setAttribute('type', 'datetime-local')
             td_issueEndDate.classList.add('input-boxes')
             td_issueEndDate.classList.add('update-end-time')
-            td_issueEndDate.setAttribute('id', 'update-end-time')
-            tr.appendChild(td_issueEndDate)
+            td_issueEndDate.classList.add('form-control')
+            td_issueEndDateData.appendChild(td_issueEndDate)
+            tr.appendChild(td_issueEndDateData)
 
             // Issue to NIC
             let td_toNIC = document.createElement('td')
@@ -145,7 +147,8 @@ updatePendingRecord = () => {
     let updateBtns = document.getElementsByClassName('admin_action_update')
     for (let updateBtn of updateBtns) {
         updateBtn.onclick = (e) => {
-            let timeDateInput = e.target.parentElement.parentElement.childNodes[3].value
+            let timeDateInput = e.target.parentElement.parentElement.childNodes[4].childNodes[0].value
+            console.log(timeDateInput);
             if (timeDateInput === "") {
                 alert("Issue End Time cannot be empty")
             }

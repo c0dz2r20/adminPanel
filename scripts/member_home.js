@@ -7,9 +7,9 @@ var firebaseConfig = {
     messagingSenderId: "130078402633",
     appId: "1:130078402633:web:7e1cf2b82b90f9a7e17798",
     measurementId: "G-382QL62H9W"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
 let db = firebase.firestore(),
     create_issue_btn = document.getElementsByClassName('create_issue_btn')[0],
@@ -21,23 +21,23 @@ let db = firebase.firestore(),
     create_user_type = document.getElementsByClassName('create_user_type')[0]
 
 create_issue_btn.onclick = () => {
-    if(create_issue_source.value === 'Issue Source') {
+    if (create_issue_source.value === 'Issue Source') {
         alert('Select valid Source Type')
     }
-    else if(create_issue_type.value === 'Issue Type'){
+    else if (create_issue_type.value === 'Issue Type') {
         alert('Select valid Issue Type')
     }
-    else if(create_user_type.value === 'User Type') {
+    else if (create_user_type.value === 'User Type') {
         alert('Select valid User Type')
     }
     else if (create_start_time.value === "") {
-        alert ('Provide Issue Start Date')
+        alert('Provide Issue Start Date')
     }
     else if (create_tonic.value === 'Referred to NIC') {
-        alert (' Select whether issue is referred to NIC ')
+        alert(' Select whether issue is referred to NIC ')
     }
     else {
-        if(create_end_time.value === "") {
+        if (create_end_time.value === "") {
             alert("You have not provided Close Time for the issue go to Records to update.")
             db_issue_logged = db.collection('issue_added').doc()
             db_issue_logged.set({
@@ -45,9 +45,10 @@ create_issue_btn.onclick = () => {
                 userType: create_user_type.value,
                 issueType: create_issue_type.value,
                 issueStartDate: create_start_time.value,
-                issueEndDate: "NP",
+                issueEndDate: "Pending",
                 toNIC: create_tonic.value,
-                serverTimeStamp: firebase.firestore.FieldValue.serverTimestamp()
+                create_serverTimeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+                update_serverTimeStamp: "NA"
             })
         }
         else {
@@ -59,10 +60,11 @@ create_issue_btn.onclick = () => {
                 issueStartDate: create_start_time.value,
                 issueEndDate: create_end_time.value,
                 toNIC: create_tonic.value,
-                serverTimeStamp: firebase.firestore.FieldValue.serverTimestamp()
+                create_serverTimeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+                update_serverTimeStamp: "NA"
             })
         }
-        alert ('Issue logged successfully  !!! ')
+        alert('Issue logged successfully  !!! ')
         create_issue_source.value = 'Issue Source'
         create_issue_type.value = 'Issue Type'
         create_user_type.value = 'User Type'
@@ -81,64 +83,56 @@ totalCountForDay = () => {
     li.classList.add('day-count-li')
 
     // Completed Count
-    let date  = new Date()
+    let date = new Date()
     let fb = firebase.firestore.Timestamp.now().toDate()
     console.log(fb);
-    // if(refDb.where('issueEndDate', '!=', fb)) {
-    //     console.log('match found');
 
-        //Completed Count
-        refDb.where('issueEndDate', '!=', 'NP').onSnapshot((querySnapshot) => {
-    
-            // Regenrating Table rows again
-            let completedList = document.querySelectorAll(".completed")
-            for(let removeOldData of completedList) {
-                removeOldData.remove()
-            }
-            let size = querySnapshot.size
-            let completed = document.createElement("span")
-            completed.classList.add('completed')
-            completed.innerText = ' Total completed - ' + size
-            li.appendChild(completed)
-            dayCount.appendChild(li)
-        })
+    //Completed Count
+    refDb.where('issueEndDate', '!=', 'Pending').onSnapshot((querySnapshot) => {
 
-        // Pending Count
-        refDb.where('issueEndDate', '==', 'NP').onSnapshot((querySnapshot) => {
+        // Regenrating Table rows again
+        let completedList = document.querySelectorAll(".completed")
+        for (let removeOldData of completedList) {
+            removeOldData.remove()
+        }
+        let size = querySnapshot.size
+        let completed = document.createElement("span")
+        completed.classList.add('completed')
+        completed.innerText = ' Total completed - ' + size
+        li.appendChild(completed)
+        dayCount.appendChild(li)
+    })
 
-            let pendingList = document.querySelectorAll(".pending")
-            for(let removeOldData of pendingList) {
-                removeOldData.remove()
-            }
-            let size = querySnapshot.size
-            let pending = document.createElement("span")
-            pending.classList.add('pending')
-            pending.innerText = ' Total Pending - ' + size
-            li.appendChild(pending)
-            dayCount.appendChild(li)
-        })
+    // Pending Count
+    refDb.where('issueEndDate', '==', 'Pending').onSnapshot((querySnapshot) => {
 
-        // Sent to NIC
-        refDb.where('toNIC', '==', 'Yes').onSnapshot((querySnapshot) => {
-            let nicList = document.querySelectorAll(".pendingfromNic")
-                for(let removeOldData of nicList) {
-                    removeOldData.remove()
-                }
-                let size = querySnapshot.size
-                let pendingfromNic = document.createElement("span")
-                pendingfromNic.classList.add('pendingfromNic')
-                pendingfromNic.innerText = ' Total pending with NIC - ' + size
-                li.appendChild(pendingfromNic)
-                dayCount.appendChild(li)
-        })
-        
-    // }
-    // else {
-    //     console.log(' No data of current day');
-    //     let noRecord = document.createElement("li")
-    //     li.innerText = "No records added for the day"
-    //     dayCount.appendChild(li)
-    // }
+        let pendingList = document.querySelectorAll(".pending")
+        for (let removeOldData of pendingList) {
+            removeOldData.remove()
+        }
+        let size = querySnapshot.size
+        let pending = document.createElement("span")
+        pending.classList.add('pending')
+        pending.innerText = ' Total Pending - ' + size
+        li.appendChild(pending)
+        dayCount.appendChild(li)
+    })
+
+    // Sent to NIC
+    refDb.where('toNIC', '==', 'Yes').onSnapshot((querySnapshot) => {
+        let nicList = document.querySelectorAll(".pendingfromNic")
+        for (let removeOldData of nicList) {
+            removeOldData.remove()
+        }
+        let size = querySnapshot.size
+        let pendingfromNic = document.createElement("span")
+        pendingfromNic.classList.add('pendingfromNic')
+        pendingfromNic.innerText = ' Total pending with NIC - ' + size
+        li.appendChild(pendingfromNic)
+        dayCount.appendChild(li)
+    })
+
+
 
 }
 

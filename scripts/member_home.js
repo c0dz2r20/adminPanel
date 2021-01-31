@@ -18,7 +18,8 @@ let db = firebase.firestore(),
     create_issue_type = document.getElementsByClassName('create_issue_type')[0],
     create_start_time = document.getElementsByClassName('create_start_time')[0],
     create_end_time = document.getElementsByClassName('create_end_time')[0],
-    create_user_type = document.getElementsByClassName('create_user_type')[0]
+    create_user_type = document.getElementsByClassName('create_user_type')[0],
+    create_issue_email = document.getElementsByClassName('create-issue-email')[0]
 
 create_issue_btn.onclick = () => {
     if (create_issue_source.value === 'Issue Source') {
@@ -29,6 +30,9 @@ create_issue_btn.onclick = () => {
     }
     else if (create_user_type.value === 'User Type') {
         alert('Select valid User Type')
+    }
+    else if (create_issue_email.value === "") {
+        alert (' Enter user email address ')
     }
     else if (create_start_time.value === "") {
         alert('Provide Issue Start Date')
@@ -48,7 +52,8 @@ create_issue_btn.onclick = () => {
                 issueEndDate: "Pending",
                 toNIC: create_tonic.value,
                 create_serverTimeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-                update_serverTimeStamp: "NA"
+                update_serverTimeStamp: "NA",
+                issueUserEmail: create_issue_email.value
             })
         }
         else {
@@ -61,7 +66,8 @@ create_issue_btn.onclick = () => {
                 issueEndDate: create_end_time.value,
                 toNIC: create_tonic.value,
                 create_serverTimeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-                update_serverTimeStamp: "NA"
+                update_serverTimeStamp: "NA",
+                issueUserEmail: create_issue_email.value
             })
         }
         alert('Issue logged successfully  !!! ')
@@ -71,6 +77,7 @@ create_issue_btn.onclick = () => {
         create_start_time.value = ""
         create_end_time.value = ""
         create_tonic.value = 'Referred to NIC'
+        create_issue_email.value = ""
     }
 }
 

@@ -67,13 +67,12 @@ filterDataBtn.onclick = () => {
 
 // Fetch Pending Data
 fetchPendingData = () => {
+    // Regenerating record again
+    let regen_rows = document.querySelectorAll('.filterTableRows')
+    for (let allRows of regen_rows) {
+        allRows.remove()
+    }
     refDb.where('issueEndDate', '==', 'Pending').onSnapshot((querySnapshot) => {
-
-        // Regenerating record again
-        let regen_rows = document.querySelectorAll('.filterTableRows')
-        for (let allRows of regen_rows) {
-            allRows.remove()
-        }
 
         querySnapshot.forEach((doc) => {
             let tr = document.createElement('tr')
@@ -89,6 +88,17 @@ fetchPendingData = () => {
             let td_userType = document.createElement('td')
             td_userType.innerText = doc.data().userType
             tr.appendChild(td_userType)
+
+            // Issue User Email
+            let td_userEmail = document.createElement('td')
+            let userFetchEmail = doc.data().issueUserEmail
+            if(userFetchEmail === undefined) {
+                td_userEmail.innerText = 'Old Record'
+            }
+            else {
+                td_userEmail.innerText = doc.data().issueUserEmail
+            }
+            tr.appendChild(td_userEmail)
 
             // Issue Type
             let td_issueType = document.createElement('td')
@@ -147,7 +157,7 @@ updatePendingRecord = () => {
     let updateBtns = document.getElementsByClassName('admin_action_update')
     for (let updateBtn of updateBtns) {
         updateBtn.onclick = (e) => {
-            let timeDateInput = e.target.parentElement.parentElement.childNodes[4].childNodes[0].value
+            let timeDateInput = e.target.parentElement.parentElement.childNodes[5].childNodes[0].value
             console.log(timeDateInput);
             if (timeDateInput === "") {
                 alert("Issue End Time cannot be empty")
@@ -155,7 +165,7 @@ updatePendingRecord = () => {
             else {
                 let targetRow = e.target.parentElement.parentElement.getAttribute('data-id')
                 refDb.doc(targetRow).update({
-                    issueEndDate: timeDateInput,
+                    issueEndDate: e.target.parentElement.parentElement.childNodes[5].childNodes[0].value,
                     update_serverTimeStamp: firebase.firestore.FieldValue.serverTimestamp()
                 })
             }

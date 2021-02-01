@@ -54,15 +54,30 @@ admin_create_user_btn.onclick = (e) => {
          timestamp: firebase.firestore.FieldValue.serverTimestamp()
       })
       alert('User created successfully !!!')
+      addedUsers()
       admin_create_user_userType.value = 'User Type'
       admin_create_user_firstName.value = ''
       admin_create_user_lastName.value = ''
       admin_create_user_email.value = ''
       admin_create_user_mobileNumber.value = ''
 
+      
       showCreatedUser()
    }
 }
+
+addedUsers = () => {
+   let authUser = admin_create_user_email.value;
+   console.log(authUser);
+   let authPass = 'Admin123$'
+   let displayName = admin_create_user_firstName.value + admin_create_user_lastName.value
+   firebase.auth().createUserWithEmailAndPassword(authUser, authPass).then((userCredential) => {
+      console.log(userCredential.user);
+      
+   }).catch(error => {console.log(error.message);})
+}
+
+
 
 // Showing Created users in the table
 showCreatedUser = () => {

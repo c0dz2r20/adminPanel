@@ -19,8 +19,36 @@ let db = firebase.firestore(),
     create_start_time = document.getElementsByClassName('create_start_time')[0],
     create_end_time = document.getElementsByClassName('create_end_time')[0],
     create_user_type = document.getElementsByClassName('create_user_type')[0],
-    create_issue_email = document.getElementsByClassName('create-issue-email')[0]
-
+    create_issue_email = document.getElementsByClassName('create-issue-email')[0],
+    loggedUserName = document.getElementsByClassName('loggedUserName')[0]
+ 
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        var uid = user.uid;
+        
+        console.log(user);
+        console.log(uid);
+        let user1 = firebase.auth().currentUser
+        user1.updateProfile({
+            displayName : 'Ankit Jeet Thakur'
+        })
+        .catch(e => {
+            console.log(e);
+        })
+        loggedUserName.innerText = user.displayName
+        user.sendEmailVerification().then(() => {
+            console.log('Email sent');
+        })
+        .catch(e => {
+            console.log(e.message);
+        })
+        // ...
+    } else {
+        alert('Some Error')
+    }
+    });
+   
+    
 create_issue_btn.onclick = () => {
     if (create_issue_source.value === 'Issue Source') {
         alert('Select valid Source Type')

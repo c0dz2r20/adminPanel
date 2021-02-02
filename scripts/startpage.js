@@ -13,14 +13,12 @@ var firebaseConfig = {
  let db = firebase.firestore(),
     loginPageEmail = document.getElementsByClassName('login-page-email')[0],
     loginPagePass = document.getElementsByClassName('login-page-pass')[0],
-    loginBtn = document.getElementsByClassName('login-btn')[0]
+    loginBtn = document.getElementsByClassName('login-btn')[0],
+    auth = firebase.auth()
 
-firebase.auth().onAuthStateChanged((user) => {
+auth.onAuthStateChanged((user) => {
   if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
     var uid = user.uid;
-    // ...
   } else {
     alert('Some Error')
   }
@@ -31,6 +29,6 @@ loginBtn.onclick = e => {
       alert('Correct Credentials')
       console.log(cred.user); 
     }).catch(error => {
-      alert(error.message);
+      alert("Wrong Credentials");
     })
 }

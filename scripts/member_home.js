@@ -20,36 +20,32 @@ let db = firebase.firestore(),
     create_end_time = document.getElementsByClassName('create_end_time')[0],
     create_user_type = document.getElementsByClassName('create_user_type')[0],
     create_issue_email = document.getElementsByClassName('create-issue-email')[0],
-    loggedUserName = document.getElementsByClassName('loggedUserName')[0]
+    loggedUserName = document.getElementsByClassName('loggedUserName')[0],
+    firstLoginTime = document.getElementsByClassName('first-login')[0]
  
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
         var uid = user.uid;
-        
-        console.log(user);
         console.log(uid);
         let user1 = firebase.auth().currentUser
-        user1.updateProfile({
-            displayName : 'Ankit Jeet Thakur'
-        })
-        .catch(e => {
-            console.log(e);
-        })
-        loggedUserName.innerText = user.displayName
-        user.sendEmailVerification().then(() => {
-            console.log('Email sent');
-        })
-        .catch(e => {
-            console.log(e.message);
-        })
-        // ...
-    } else {
+        console.log(user1);
+        loggedUserName.innerText = user1.email
+        let d = user1.metadata.b
+        let x = new Date()
+        x.setTime(d)
+        let finalDate = x.toString().replace('GMT+0530 (India Standard Time)', "")
+        firstLoginTime.innerText = "First Login : " + finalDate
+        totalCountForDay()
+        create_issue_btn.onclick = (user) => {
+            addIssue(user)
+        }
+    }
+    else {
         alert('Some Error')
     }
     });
    
-    
-create_issue_btn.onclick = () => {
+addIssue = (user) => {
     if (create_issue_source.value === 'Issue Source') {
         alert('Select valid Source Type')
     }
@@ -71,7 +67,7 @@ create_issue_btn.onclick = () => {
     else {
         if (create_end_time.value === "") {
             alert("You have not provided Close Time for the issue go to Records to update.")
-            db_issue_logged = db.collection('issue_added').doc()
+            db_issue_logged = db.collection('issue_added').doc('user.uid')
             db_issue_logged.set({
                 issueSource: create_issue_source.value,
                 userType: create_user_type.value,
@@ -120,7 +116,6 @@ totalCountForDay = () => {
     // Completed Count
     let date = new Date()
     let fb = firebase.firestore.Timestamp.now().toDate()
-    console.log(fb);
 
     //Completed Count
     refDb.where('issueEndDate', '!=', 'Pending').onSnapshot((querySnapshot) => {
@@ -166,9 +161,6 @@ totalCountForDay = () => {
         li.appendChild(pendingfromNic)
         dayCount.appendChild(li)
     })
-
-
-
 }
 
-totalCountForDay()
+// totalCountForDay()

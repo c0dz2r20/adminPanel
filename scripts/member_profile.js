@@ -3,21 +3,32 @@
       refDb = db.collection('new_users'),
       updateProfileBtn = document.getElementsByClassName("update-profile")[0]
 
-showUsers = () => {
-    refDb.limit(1).onSnapshot((querySnapshot) => {
-
-        // Regenrating Table rows again
-        let memberLeave = document.querySelectorAll('.members-leave-class')
-        for(let mleave of memberLeave) {
-            mleave.remove();                
-        }
-        querySnapshot.forEach((doc) => {
+firebase.auth().onAuthStateChanged((user) => {
+if (user) {
+    var uid = user.uid;
+    let user1 = firebase.auth().currentUser
+    loggedUserName.innerText = user1.email
+    let d = user1.metadata.b
+    let x = new Date()
+    x.setTime(d)
+    let finalDate = x.toString().replace('GMT+0530 (India Standard Time)', "")
+    firstLoginTime.innerText = "First Login : " + finalDate
+    
+    something(user)
+    
+}
+else {
+    alert('You are logged out')
+}
+});
+something = (user) => {
+    console.log(user.uid);
+    refDb.where('userId', '==', user.uid).get().then((snapshot) => {
+        snapshot.forEach(doc => {
             createTable(doc)
         })
     })
 }
-showUsers()
-
 // Creating Record table
 createTable = (doc) => {
     let tr = document.createElement('tr')

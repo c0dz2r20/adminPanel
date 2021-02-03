@@ -10,8 +10,26 @@ let admin_create_user_userType = document.getElementById('admin-create-user-user
    admin_show_user_table = document.getElementsByClassName('admin_show_user_table')[0],
    admin_show_user_table_body = document.getElementsByClassName('admin_show_user_table_body')[0]
    
-admin_create_user_btn.onclick = (e) => {
-   e.preventDefault()
+
+firebase.auth().onAuthStateChanged((user) => {
+   if (user) {
+         var uid = user.uid;
+         let user1 = firebase.auth().currentUser
+         loggedUserName.innerText = user1.email
+         let d = user1.metadata.b
+         let x = new Date()
+         x.setTime(d)
+         let finalDate = x.toString().replace('GMT+0530 (India Standard Time)', "")
+         firstLoginTime.innerText = "First Login : " + finalDate
+         admin_create_user_btn.onclick = (e) => {
+            e.preventDefault()
+            createNewUsers(user)
+         }
+   }
+});
+
+createNewUsers = user => {
+   
    if (admin_create_user_userType.value === 'User Type') {
       alert('User Type is not valid !!!')
    }
@@ -33,6 +51,7 @@ admin_create_user_btn.onclick = (e) => {
       addedUsers()
       let admin_db = db.collection('new_users').doc()
          admin_db.set({
+            userId: user.uid,
             userType: admin_create_user_userType.value,
             firstName: admin_create_user_firstName.value,
             lastName: admin_create_user_lastName.value,
@@ -48,8 +67,8 @@ admin_create_user_btn.onclick = (e) => {
 addedUsers = () => {
    let authUser = admin_create_user_email.value;
    let authPass = 'Admin123$'
-   auth.createUserWithEmailAndPassword(authUser, authPass)
-   .catch(error => {console.log(error);})
+   secondaryApp.auth().createUserWithEmailAndPassword(authUser, authPass)
+   .catch(error => {alert(error.message);})
    .then((cred) => {
       if (cred.user != null) {
          let displayName = admin_create_user_firstName.value + " " + admin_create_user_lastName.value
@@ -69,6 +88,7 @@ addedUsers = () => {
       else {
          console.log('Unable to create users.');
       }
+      // secondaryApp.auth.signOut()
    })
    
 }
@@ -116,7 +136,6 @@ creatingTable = doc => {
    // Table Data for Created On
    let td_logTime = document.createElement('td')
    let outT = doc.data().timestamp.seconds
-   console.log(outT);
    let n = new Date()
    n.setTime(outT * 1000)
    td_logTime.innerText = n

@@ -15,7 +15,12 @@ let =
           firebase.auth().signInWithEmailAndPassword(loginPageEmail.value, loginPagePass.value).then(cred => {
             auth.onAuthStateChanged((user) => {
               if (user) {
-                window.location.assign('member-home.html')
+                if(user.email === 'ankitjeetthakur@gmail.com'){
+                  window.location.assign('admin-home.html')
+                }
+                else {
+                  window.location.assign('member-home.html')
+                }
               } 
             });
           }).catch(error => {

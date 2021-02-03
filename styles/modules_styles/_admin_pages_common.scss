@@ -12,103 +12,8 @@
   transition: 0.5s ease;
 }
 
-.custom-buttons {
-  background-color: #6c63ff;
-  border: none;
-  color: #eee;
-  font-family: inherit;
-  border-radius: 4px;
-  width: auto;
-  padding: 6px 18px;
-  text-transform: capitalize;
-  font-size: 14px;
-  letter-spacing: 1px;
-  font-family: "Raleway", sans-serif;
-  font-weight: 400;
-  margin: 20px 0;
-  outline: none;
-}
-
-.input-boxes {
-  padding: 6px 0;
-  margin: 18px 0;
-  width: 100%;
-  outline: transparent !important;
-  border: none;
-  background-color: transparent;
-  border-bottom: 2px solid #6c63ff;
-  font-size: 14px;
-  font-family: inherit;
-  color: #525252;
-  font-weight: bolder;
-  border-radius: 0;
-}
-
-.admin-pages {
-  height: 100%;
-  .top-navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #6c63ff;
-    padding: 20px;
-    font-size: 14px;
-    color: #fff;
-    .user-profile {
-      display: flex;
-      .notifications {
-        margin-right: 20px;
-      }
-    }
-  }
-
-  .second-navbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px;
-    flex-wrap: wrap;
-    text-align: center;
-    a {
-      text-decoration: none;
-      color: #fff;
-      font-size: 10px;
-      display: flex;
-      align-items: center;
-      background-color: #6c63ff;
-      padding: 7px 10px;
-      border-radius: 3px;
-      margin: 10px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      text-align: center;
-      text-transform: uppercase;
-      outline: none;
-      svg {
-        margin-left: 8px;
-      }
-    }
-  }
-}
 .container {
   padding-bottom: 20px !important;
-}
-.pills {
-  box-shadow: 2px 2px 20px #e1e1e1;
-  padding: 10px 20px;
-  border-radius: 8px;
-  height: auto;
-  margin: 20px 0;
-
-  .table-name {
-    color: #6c63ff;
-    display: inline-block;
-    margin: 0;
-    font-size: 12px;
-    text-transform: uppercase;
-    font-weight: bolder;
-    padding: 10px 20px 0 0;
-  }
 }
 
 .pills-issue-count {
@@ -193,8 +98,13 @@
   vertical-align: middle;
 }
 
-@media (max-width: 820px) {
-  .second-navbar {
-    justify-content: initial !important;
+.record-fields {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
+  .record-wrapper {
+    display: flex;
+    justify-content: space-between;
   }
 }

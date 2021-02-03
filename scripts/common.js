@@ -10,4 +10,10 @@ var firebaseConfig = {
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   let db = firebase.firestore(),
-  auth = firebase.auth()
+  auth = firebase.auth(),
+  logOut = document.getElementsByClassName('logout')[0]
+  logOut.onclick = () => {
+    auth.signOut()
+    alert(' You are logged out !!! ')
+    window.location.assign('startpage.html')
+}

@@ -13,9 +13,7 @@ let
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
         var uid = user.uid;
-        console.log(uid);
         let user1 = firebase.auth().currentUser
-        console.log(user1);
         loggedUserName.innerText = user1.email
         let d = user1.metadata.b
         let x = new Date()
@@ -23,14 +21,12 @@ firebase.auth().onAuthStateChanged((user) => {
         let finalDate = x.toString().replace('GMT+0530 (India Standard Time)', "")
         firstLoginTime.innerText = "First Login : " + finalDate
         totalCountForDay()
-        create_issue_btn.onclick = (user) => {
+        create_issue_btn.onclick = () => {
+            console.log(user);
             addIssue(user)
         }
     }
-    else {
-        alert('Some Error')
-    }
-    });
+});
    
 addIssue = (user) => {
     if (create_issue_source.value === 'Issue Source') {
@@ -56,6 +52,7 @@ addIssue = (user) => {
             alert("You have not provided Close Time for the issue go to Records to update.")
             db_issue_logged = db.collection('issue_added').doc('user.uid')
             db_issue_logged.set({
+                userId: user.uid,
                 issueSource: create_issue_source.value,
                 userType: create_user_type.value,
                 issueType: create_issue_type.value,
@@ -69,7 +66,9 @@ addIssue = (user) => {
         }
         else {
             db_issue_logged = db.collection('issue_added').doc()
+            console.log();
             db_issue_logged.set({
+                userId: user.uid,
                 issueSource: create_issue_source.value,
                 userType: create_user_type.value,
                 issueType: create_issue_type.value,

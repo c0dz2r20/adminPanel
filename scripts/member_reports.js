@@ -6,18 +6,39 @@ let
     reportIssueType = document.getElementsByClassName('reportIssueType')[0],
     reportToNic = document.getElementsByClassName('reportToNic')[0],
     filterData=  document.getElementsByClassName('filterData')[0],
-    reportIssueTypeHeader = document.getElementById('reportIssueTypeHeader')
+    reportIssueTypeHeader = document.getElementById('reportIssueTypeHeader'),
+    loggedUserName = document.getElementsByClassName('loggedUserName')[0],
+    firstLoginTime = document.getElementsByClassName('first-login')[0]
 
-filterData.onclick = (e) => {
-    e.preventDefault()
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        var uid = user.uid;
+        let user1 = firebase.auth().currentUser
+        loggedUserName.innerText = user1.email
+        let d = user1.metadata.b
+        let x = new Date()
+        x.setTime(d)
+        let finalDate = x.toString().replace('GMT+0530 (India Standard Time)', "")
+        firstLoginTime.innerText = "First Login : " + finalDate
+        filterData.onclick = (e) => {
+            e.preventDefault()
+            filterDataShow(user)
+        }
+        
+    }
+    else {
+        alert('You are logged out')
+    }
+});
+
+filterDataShow = (user) => {
     if(reportIssueType.value === "Issue Type") {
         alert ('Select both the criterias to filter.')
     }
 
-   
     else {
         let refDb = db.collection('issue_added')
-        refDb.where("issueType", "==", reportIssueType.value).get().then((snapshot) => {
+        refDb.where("userId", "==", user.uid).where('issueType', '==', reportIssueType.value).get().then((snapshot) => {
 
             let pendingList = document.querySelectorAll(".pending")
             for (let removeOldData of pendingList) {
@@ -54,6 +75,11 @@ filterData.onclick = (e) => {
                         report_call.innerText = "-"
                     }
                     tr.appendChild(report_call)
+
+                    // User Email
+                    let td_email = document.createElement('td')
+                    td_email.innerText = doc.data().issueUserEmail
+                    tr.appendChild(td_email)
     
                     // Issue Start Date
                     let td_issueStartDate = document.createElement('td')

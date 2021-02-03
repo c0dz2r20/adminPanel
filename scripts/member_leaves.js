@@ -4,25 +4,37 @@ let
     leave_end_date = document.getElementsByClassName('leave-end-date')[0],
     raise_request = document.getElementsByClassName('raise-request')[0]
 
-raise_request.onclick = () => {
-    if(leave_details.value === "") {
-        alert('Leave details missing')
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        var uid = user.uid;
+        let user1 = firebase.auth().currentUser
+        loggedUserName.innerText = user1.email
+        let d = user1.metadata.b
+        let x = new Date()
+        x.setTime(d)
+        let finalDate = x.toString().replace('GMT+0530 (India Standard Time)', "")
+        firstLoginTime.innerText = "First Login : " + finalDate
+        raise_request.onclick = () => {
+            if(leave_details.value === "") {
+                alert('Leave details missing')
+            }
+            else if (leave_start_date.value === "") {
+                alert ('Provide Start Date')
+            }
+            else if (leave_end_date.value === "") {
+                alert ('Provide End Date')
+            }
+            else {
+                leave_request_toDb()
+                alert (' Request sent successfully  !!! ')
+                leave_details.value = ''
+                leave_start_date.value = ''
+                leave_end_date.value = ''
+                
+            }
+        }
     }
-    else if (leave_start_date.value === "") {
-        alert ('Provide Start Date')
-    }
-    else if (leave_end_date.value === "") {
-        alert ('Provide End Date')
-    }
-    else {
-        leave_request_toDb()
-        alert (' Request sent successfully  !!! ')
-        leave_details.value = ''
-        leave_start_date.value = ''
-        leave_end_date.value = ''
-        
-    }
-}
+});
 
 db_leaves = db.collection('leave_requests')
 

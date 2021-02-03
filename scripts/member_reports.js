@@ -6,9 +6,7 @@ let
     reportIssueType = document.getElementsByClassName('reportIssueType')[0],
     reportToNic = document.getElementsByClassName('reportToNic')[0],
     filterData=  document.getElementsByClassName('filterData')[0],
-    reportIssueTypeHeader = document.getElementById('reportIssueTypeHeader'),
-    loggedUserName = document.getElementsByClassName('loggedUserName')[0],
-    firstLoginTime = document.getElementsByClassName('first-login')[0]
+    reportIssueTypeHeader = document.getElementById('reportIssueTypeHeader')
 
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
